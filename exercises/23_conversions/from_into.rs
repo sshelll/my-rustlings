@@ -3,6 +3,7 @@
 // You can read more about it in the documentation:
 // https://doc.rust-lang.org/std/convert/trait.From.html
 
+#[allow(dead_code)]
 #[derive(Debug)]
 struct Person {
     name: String,
@@ -20,11 +21,7 @@ impl Default for Person {
     }
 }
 
-// TODO: Complete this `From` implementation to be able to parse a `Person`
-// out of a string in the form of "Mark,20".
-// Note that you'll need to parse the age component into a `u8` with something
-// like `"4".parse::<u8>()`.
-//
+
 // Steps:
 // 1. Split the given string on the commas present in it.
 // 2. If the split operation returns less or more than 2 elements, return the
@@ -34,7 +31,26 @@ impl Default for Person {
 // 5. Parse the second element from the split operation into a `u8` as the age.
 // 6. If parsing the age fails, return the default of `Person`.
 impl From<&str> for Person {
-    fn from(s: &str) -> Self {}
+    fn from(s: &str) -> Self {
+        let parts: Vec<&str> = s.split(',').collect();
+        if parts.len() != 2 {
+            return Person::default();
+        }
+
+        let name = parts[0];
+        if name.is_empty() {
+            return Person::default();
+        }
+
+        let age = parts[1].parse::<u8>();
+        match age {
+            Ok(age) => Person {
+                name: name.to_string(),
+                age,
+            },
+            Err(_) => Person::default(),
+        }
+    }
 }
 
 fn main() {

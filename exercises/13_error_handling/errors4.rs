@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 #[derive(PartialEq, Debug)]
 enum CreationError {
     Negative,
@@ -9,8 +11,19 @@ struct PositiveNonzeroInteger(u64);
 
 impl PositiveNonzeroInteger {
     fn new(value: i64) -> Result<Self, CreationError> {
-        // TODO: This function shouldn't always return an `Ok`.
-        Ok(Self(value as u64))
+        match value {
+            x if x < 0 => Err(CreationError::Negative),
+            0 => Err(CreationError::Zero),
+            x => Ok(PositiveNonzeroInteger(x as u64)),
+        }
+    }
+
+    fn new_cmp(value: i64) -> Result<Self, CreationError> {
+        match value.cmp(&0) {
+            std::cmp::Ordering::Less => Err(CreationError::Negative),
+            std::cmp::Ordering::Equal => Err(CreationError::Zero),
+            std::cmp::Ordering::Greater => Ok(PositiveNonzeroInteger(value as u64)),
+        }
     }
 }
 

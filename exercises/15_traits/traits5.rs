@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 trait SomeTrait {
     fn some_function(&self) -> bool {
         true
@@ -18,8 +20,10 @@ struct OtherStruct;
 impl SomeTrait for OtherStruct {}
 impl OtherTrait for OtherStruct {}
 
-// TODO: Fix the compiler error by only changing the signature of this function.
-fn some_func(item: ???) -> bool {
+fn some_func<T>(item: T) -> bool
+where
+    T: SomeTrait + OtherTrait,
+{
     item.some_function() && item.other_function()
 }
 

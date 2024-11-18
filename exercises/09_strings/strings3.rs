@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 fn trim_me(input: &str) -> &str {
-    input.trim_end()
+    input.trim()
 }
 
 fn compose_me(input: &str) -> String {
